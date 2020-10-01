@@ -7,14 +7,14 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class LoginDto {
+public class LoginDTO {
 	
-	private static final Logger logger=Logger.getLogger(LoginDto.class);
+	private static final Logger logger=Logger.getLogger(LoginDTO.class);
 	
 	private String firstName;
 	private String lastName;
 	
-	public LoginDto() {
+	public LoginDTO() {
 		logger.info("Created "+this.getClass().getSimpleName());
 	}
 

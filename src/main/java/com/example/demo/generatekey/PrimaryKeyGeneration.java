@@ -32,7 +32,7 @@ public class PrimaryKeyGeneration implements IdentifierGenerator{
 			log.info("Key is : "+primaryKey);
 			
 		}catch (Exception e) {
-			log.error("Error in generate() in "+this.getClass().getSimpleName());
+			log.error("Error in generate() in "+this.getClass().getSimpleName(),e);
 		}
 		return primaryKey;
 	}

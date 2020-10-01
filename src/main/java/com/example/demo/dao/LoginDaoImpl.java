@@ -1,8 +1,6 @@
 package com.example.demo.dao;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManagerFactory;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.jboss.logging.Logger;
@@ -13,7 +11,7 @@ import com.example.demo.entity.LoginEntity;
 import com.example.demo.utility.SpringUtilClass;
 
 @Repository
-public class LoginDaoImpl implements LoginDao{
+public class LoginDAOImpl implements LoginDAO{
 	
 	@Autowired
 	private SpringUtilClass util;
@@ -23,15 +21,16 @@ public class LoginDaoImpl implements LoginDao{
 	
 //	@Autowired
 //	private EntityManagerFactory manFactory;
-	private static final Logger log=Logger.getLogger(LoginDaoImpl.class);
+	private static final Logger log=Logger.getLogger(LoginDAOImpl.class);
 	
-	public LoginDaoImpl() {
+	public LoginDAOImpl() {
 		log.info("Created "+this.getClass().getSimpleName());
 	}
 	
 	@PostConstruct
 	public void init()
 	{
+		log.info("Invoked init()");
 		factory=util.returnFactory();
 	}
 	
@@ -41,19 +40,18 @@ public class LoginDaoImpl implements LoginDao{
 		log.info("Invoked save() from "+this.getClass().getSimpleName());
 		String result=null;
 		Session session=factory.openSession(); 
-		String name="Vinay";
+//		String name="Vinay";
 		try {
 //			String query="insert into lpg_login values('"+name+"','"+name+"','"+name+"');";
 //			Query query=se
 			session.beginTransaction();
-//			
 			session.save(entity);
-			session.getTransaction().commit();
+//			session.getTransaction().commit();
 			result="data saved into database successfully";
 		}catch (Exception e) {
 			result="failed to save data";
 			session.getTransaction().rollback();
-			log.error("error occured in save() from "+this.getClass().getSimpleName());
+			log.error("error occured in save() from "+this.getClass().getSimpleName(),e);
 		}finally {
 			session.close();
 			

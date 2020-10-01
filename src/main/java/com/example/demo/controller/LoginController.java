@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.demo.dto.LoginDto;
+import com.example.demo.dto.LoginDTO;
 import com.example.demo.service.LoginService;
 
 
@@ -21,7 +21,7 @@ public class LoginController {
 	LoginService loginService;
 	
 	public LoginController() {
-		System.out.println("Created "+this.getClass().getSimpleName());
+		logger.info("Created "+this.getClass().getSimpleName());
 		logger.info("Object is created");
 		logger.error("Error has occurred in application");
 		logger.debug("This is deBug Message");
@@ -30,21 +30,30 @@ public class LoginController {
 	@RequestMapping("/")
 	public String onLanding()
 	{
-		System.out.println("Invoked onLanding()");
+		try {
+		logger.info("Invoked onLanding() from "+this.getClass().getSimpleName());
+		}
+		catch (Exception e) {
+			logger.error("error in onLoanding() from "+this.getClass().getSimpleName(),e);
+		}
 		return "Login";
 	}
 	
 	@PostMapping("/login")
-	public String onLogin(LoginDto dto,Model model)
+	public String onLogin(LoginDTO dto,Model model)
 	{
-		logger.info("Invoked onLogin()");
+		try {
+		logger.info("Invoked onLogin() from "+this.getClass().getSimpleName());
 		String check=null;
-		System.out.println("Dto is : "+dto);
+		logger.info("Dto is : "+dto);
 		check=loginService.validateAndSave(dto);
-		System.out.println("Status is "+check);
-		model.addAttribute("fname", "FirstName is "+dto.getFirstName());
-		model.addAttribute("lname","LastName is "+ dto.getLastName());
-		model.addAttribute("status", check);
+		logger.info("Status is "+check);
+		model.addAttribute("fname", "FirstName is <b>"+dto.getFirstName()+"</b>");
+		model.addAttribute("lname","LastName is <b>"+ dto.getLastName()+"</b>");
+		model.addAttribute("status", check);}
+		catch (Exception e) {
+			logger.error("Error in onLogin() from "+this.getClass().getSimpleName(),e);
+		}
 		return "Success";
 	}
 

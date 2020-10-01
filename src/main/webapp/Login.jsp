@@ -9,6 +9,22 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <style>
+  #sel{
+  margin-left:20%;
+  margin-right:20%;
+  margin-top:5%;
+  }
+  #sel1{
+  padding:5%;
+  background:lightgreen;
+  margin-left:20%;
+  margin-right:20%;
+  }
+  #in{
+  width:80%;
+  }
+  </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-black">
@@ -26,24 +42,26 @@
 </nav>
 <h3>Welcome to The New World </h3>
 
-<div>
+<div id="sel">
+<div id="sel1">
 <form action="login" method="post">
-<div>
+<div class="form-group">
 <label>Enter First Name : </label>
-<input type="text" name="firstName">
+<input type="text" name="firstName" class="form-control" id="in">
 </div>
 
-<div>
+<div class="form-group">
 <label>Enter Last Name : </label>
-<input type="text" name="lastName">
+<input type="text" name="lastName" class="form-control" id="in">
 </div>
 
 <div>
-<button type="submit">Submit</button>
-<button type="reset">Cancel</button>
+<button type="submit" class="btn btn-success">Submit</button>
+<button type="reset" class="btn btn-danger">Cancel</button>
 </div>
 
 </form>
+</div>
 </div>
 </body>
 </html>

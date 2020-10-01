@@ -1,9 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.LoginDto;
+import com.example.demo.dto.LoginDTO;
 
 public interface LoginService {
 	
-	public String validateAndSave(LoginDto dto);
+	public String validateAndSave(LoginDTO dto);
 
 }
