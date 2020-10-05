@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.jboss.logging.Logger;
@@ -9,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dao.LoginDAO;
+import com.example.demo.dto.EnvironmentDTO;
 import com.example.demo.dto.LoginDTO;
+import com.example.demo.entity.EnvironmentEntity;
 import com.example.demo.entity.LoginEntity;
 
 @Service
@@ -24,22 +28,34 @@ public class LoginServiceImpl implements LoginService{
 	}
 	
 	@Override
-	public String validateAndSave(LoginDTO dto) {
+	public String validateAndSave(LoginDTO dto, List<EnvironmentDTO> envList) {
 		log.info("Invoked validateAndSave() in LoginServiceImpl");
-		LoginEntity entity=new LoginEntity();
+		LoginEntity loginEntity=new LoginEntity();
+		List<EnvironmentEntity> envEntitySList=new ArrayList<>();
 		String name=null;
 		try {
 			if(Objects.nonNull(dto))
 			{
 				log.info("Dto is not null");
-				if(!dto.getFirstName().isEmpty() && !dto.getLastName().isEmpty())
 				{
 					ModelMapper mapper=new ModelMapper();
-					mapper.map(dto, entity);
+					mapper.map(dto, loginEntity);
+					
+					for(EnvironmentDTO env:envList) {
+						
+						EnvironmentEntity envEntity=new EnvironmentEntity();
+						mapper.map(env, envEntity);
+						envEntity.setLoginEntity(loginEntity);
+						envEntitySList.add(envEntity);
+					}
+					
+					loginEntity.setEntity(envEntitySList);
+					
 //					BeanUtils.copyProperties(dto, entity);
 					log.info("FirstName and LastName are valid");
-					log.info("Entity is : "+entity);
-					name=loginDao.save(entity);
+					log.info("Entity is : "+loginEntity);
+					
+					name=loginDao.save(loginEntity,envEntitySList);
 				}
 			}
 		}catch (Exception e) {

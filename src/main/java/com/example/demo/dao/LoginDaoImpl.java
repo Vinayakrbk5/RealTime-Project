@@ -1,5 +1,7 @@
 package com.example.demo.dao;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -7,6 +9,7 @@ import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.entity.EnvironmentEntity;
 import com.example.demo.entity.LoginEntity;
 import com.example.demo.utility.SpringUtilClass;
 
@@ -35,7 +38,7 @@ public class LoginDAOImpl implements LoginDAO{
 	}
 	
 	@Override
-	public String save(LoginEntity entity) {
+	public String save(LoginEntity entity,List<EnvironmentEntity> envSet) {
 		
 		log.info("Invoked save() from "+this.getClass().getSimpleName());
 		String result=null;
@@ -46,7 +49,15 @@ public class LoginDAOImpl implements LoginDAO{
 //			Query query=se
 			session.beginTransaction();
 			session.save(entity);
-//			session.getTransaction().commit();
+			System.out.println("Started For loop");
+			System.out.println("List is : "+envSet);
+			for(EnvironmentEntity ent:envSet)
+			{
+				System.out.println("Entity is : "+ent);
+				session.save(ent);
+			}
+			System.out.println("End of for loop");
+			session.getTransaction().commit();
 			result="data saved into database successfully";
 		}catch (Exception e) {
 			result="failed to save data";

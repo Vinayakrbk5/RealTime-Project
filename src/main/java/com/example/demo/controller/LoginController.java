@@ -1,5 +1,10 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -7,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.demo.dto.EnvironmentDTO;
 import com.example.demo.dto.LoginDTO;
 import com.example.demo.service.LoginService;
 
@@ -14,6 +20,8 @@ import com.example.demo.service.LoginService;
 @Controller
 @RequestMapping("/")
 public class LoginController {
+	
+	private List<EnvironmentDTO> envList;
 	
 	private static final Logger logger=Logger.getLogger(LoginController.class);
 	
@@ -25,6 +33,13 @@ public class LoginController {
 		logger.info("Object is created");
 		logger.error("Error has occurred in application");
 		logger.debug("This is deBug Message");
+	}
+	
+	@PostConstruct
+	public void init()
+	{
+		logger.info("Invoked init() from Loginontroller");
+		envList=new ArrayList<>(); 
 	}
 	
 	@RequestMapping("/")
@@ -46,15 +61,27 @@ public class LoginController {
 		logger.info("Invoked onLogin() from "+this.getClass().getSimpleName());
 		String check=null;
 		logger.info("Dto is : "+dto);
-		check=loginService.validateAndSave(dto);
+		check=loginService.validateAndSave(dto, envList);
+		envList.removeAll(envList);
 		logger.info("Status is "+check);
-		model.addAttribute("fname", "FirstName is <b>"+dto.getFirstName()+"</b>");
-		model.addAttribute("lname","LastName is <b>"+ dto.getLastName()+"</b>");
-		model.addAttribute("status", check);}
+		model.addAttribute("status", check);
+		}
 		catch (Exception e) {
 			logger.error("Error in onLogin() from "+this.getClass().getSimpleName(),e);
 		}
 		return "Success";
+	}
+	
+	@PostMapping("addEnv")
+	public String onAdding(EnvironmentDTO envDto)
+	{
+		logger.info("Invoked onAdding() from "+this.getClass().getSimpleName());
+		
+		logger.info("Env name : "+envDto.getEnvValue());
+		logger.info("Url : "+envDto.getUrl());
+		envList.add(envDto);
+		envList.forEach(p->System.out.println(p));
+		return "Login";
 	}
 
 }
