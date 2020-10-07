@@ -7,9 +7,11 @@ import javax.annotation.PostConstruct;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.dto.EnvironmentDTO;
@@ -73,7 +75,7 @@ public class LoginController {
 	}
 	
 	@PostMapping("addEnv")
-	public String onAdding(EnvironmentDTO envDto)
+	public ResponseEntity<Object> onAdding(@RequestBody EnvironmentDTO envDto)
 	{
 		logger.info("Invoked onAdding() from "+this.getClass().getSimpleName());
 		
@@ -81,7 +83,7 @@ public class LoginController {
 		logger.info("Url : "+envDto.getUrl());
 		envList.add(envDto);
 		envList.forEach(p->System.out.println(p));
-		return "Login";
+		return ResponseEntity.ok().body("Success");
 	}
 
 }

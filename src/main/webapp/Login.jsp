@@ -5,6 +5,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Enterprise-Project</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <script
@@ -71,27 +72,29 @@
 									</button>
 								</div>
 								<div class="modal-body">
-									<form action="addEnv" method="post">
+<!-- 									<form action="addEnv" method="post"> -->
 
 										<div class="form-group">
-											<label>Select Environment : </label> <select name="envValue"
+											<label>Select Environment : </label> <select name="environment" id="environment"
 												class="form-control">
 												<option value="DEV">Develop</option>
-												<option value="SIT">Sit</option>
+												<option value="SIT">SIT</option>
+												<option value="UAT">UAT</option>
 												<option value="PROD">Production</option>
 											</select>
 										</div>
 										<div class="form-group">
-											<label>URL : </label> <input type="text" class="form-control" name="url"/>
+											<label>URL : </label> <input type="text" class="form-control" name="url" id="url"/>
 										</div>
 
 										<div>
-											<button type="submit" class="btn btn-success">Submit</button>
+										<input type="button" class="btn btn-success" name="PostData" id="postData" value="Save" onclick="postDataFromAPI()"/>
+<!-- 											<button type="submit" class="btn btn-success">Submit</button> -->
 											<button type="reset" class="btn btn-danger">Cancel</button>
 										</div>
 
 
-									</form>
+<!-- 									</form> -->
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-secondary"
@@ -107,7 +110,7 @@
 			<form action="login" method="post">
 				<div class="form-group">
 					<label>Project Name : </label> <input type="text" name="projectName"
-						class="form-control" id="in">
+						class="form-control" id="in" required>
 				</div>
 
 				<div class="form-group">
@@ -117,12 +120,12 @@
 
 				<div class="form-group">
 					<label>Team Contact Email : </label> <input type="text"
-						name="lastName" class="form-control" id="in" name="email">
+						name="lastName" class="form-control" id="in" name="email" required>
 				</div>
 
 				<div class="form-group">
 					<label for="id">De-Commissioned : </label> 
-					<select  name="isDeComisioned" class="form-control" id="in">
+					<select  name="isDeComisioned" class="form-control" id="in" required>
 					<option value="yes">Yes</option>
 					<option value="no">No</option>
 					</select>
@@ -160,5 +163,29 @@
 			
 		</div>
 	</div>
+	
+	<script >
+	function postDataFromAPI(){
+		var modelObj={ envValue:$("#environment").val(),url:$("#url").val() };
+		console.log("Object is : "+modelObj);
+		
+		$.ajax({
+			type:"POST",
+			url:"/addEnv",
+			headers:{
+				"Content-Type":"application/json",
+				"Accept":"application/json"
+			},
+			data:JSON.stringify(modelObj),
+			success:function(data){
+				console.log("Data is : "+data);
+			},
+			error:function(jqXHR,textStatus,errorThrown){
+			}
+		});
+	}
+
+	</script>
+
 </body>
 </html>

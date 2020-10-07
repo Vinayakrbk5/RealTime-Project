@@ -52,7 +52,7 @@ public class LoginServiceImpl implements LoginService{
 					loginEntity.setEntity(envEntitySList);
 					
 //					BeanUtils.copyProperties(dto, entity);
-					log.info("FirstName and LastName are valid");
+//					log.info("FirstName and LastName are valid");
 					log.info("Entity is : "+loginEntity);
 					
 					name=loginDao.save(loginEntity,envEntitySList);

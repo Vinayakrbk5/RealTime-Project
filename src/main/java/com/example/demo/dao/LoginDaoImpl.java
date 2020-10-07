@@ -49,14 +49,14 @@ public class LoginDAOImpl implements LoginDAO{
 //			Query query=se
 			session.beginTransaction();
 			session.save(entity);
-			System.out.println("Started For loop");
-			System.out.println("List is : "+envSet);
+			log.info("Started For loop");
+			log.info("List is : "+envSet);
 			for(EnvironmentEntity ent:envSet)
 			{
 				System.out.println("Entity is : "+ent);
 				session.save(ent);
 			}
-			System.out.println("End of for loop");
+			log.info("End of for loop");
 			session.getTransaction().commit();
 			result="data saved into database successfully";
 		}catch (Exception e) {

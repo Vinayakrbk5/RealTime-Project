@@ -16,6 +16,9 @@
     <li class="nav-item active">
       <a class="nav-link" href="#" >X-Workz</a>
     </li>
+    <li class="nav-item active">
+      <a class="nav-link" href="Login.jsp" >Login</a>
+    </li>
   </ul>
 </nav>
 <h3> ${status} </h3>
