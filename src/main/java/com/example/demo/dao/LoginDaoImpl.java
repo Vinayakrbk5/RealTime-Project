@@ -38,7 +38,7 @@ public class LoginDAOImpl implements LoginDAO{
 	}
 	
 	@Override
-	public String save(LoginEntity entity,List<EnvironmentEntity> envSet) {
+	public String save(LoginEntity entity) {
 		
 		log.info("Invoked save() from "+this.getClass().getSimpleName());
 		String result=null;
@@ -50,12 +50,12 @@ public class LoginDAOImpl implements LoginDAO{
 			session.beginTransaction();
 			session.save(entity);
 			log.info("Started For loop");
-			log.info("List is : "+envSet);
-			for(EnvironmentEntity ent:envSet)
-			{
-				System.out.println("Entity is : "+ent);
-				session.save(ent);
-			}
+//			log.info("List is : "+envSet);
+//			for(EnvironmentEntity ent:envSet)
+//			{
+//				System.out.println("Entity is : "+ent);
+//				session.save(ent);
+//			}
 			log.info("End of for loop");
 			session.getTransaction().commit();
 			result="data saved into database successfully";

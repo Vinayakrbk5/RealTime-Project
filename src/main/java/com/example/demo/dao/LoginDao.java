@@ -7,6 +7,6 @@ import com.example.demo.entity.LoginEntity;
 
 public interface LoginDAO {
 	
-	public String save(LoginEntity entity,List<EnvironmentEntity> envSet);
+	public String save(LoginEntity entity);
 
 }

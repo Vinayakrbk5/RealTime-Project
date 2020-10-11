@@ -20,6 +20,10 @@ public class LoginDTO {
 	private String version;
 	private String lastRelease;
 	private String nextRelease;
+	private String creationTime;
+	private String createdBy;
+	private String updateTime;
+	private String updatedBy;
 	
 	public LoginDTO() {
 		logger.info("Created "+this.getClass().getSimpleName());

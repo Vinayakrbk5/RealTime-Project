@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.dto.EnvironmentDTO;
 import com.example.demo.dto.LoginDTO;
@@ -71,19 +72,33 @@ public class LoginController {
 		catch (Exception e) {
 			logger.error("Error in onLogin() from "+this.getClass().getSimpleName(),e);
 		}
-		return "Success";
+		return "Login";
 	}
 	
 	@PostMapping("addEnv")
-	public ResponseEntity<Object> onAdding(@RequestBody EnvironmentDTO envDto)
+	public ResponseEntity<Object> onAdding(@RequestBody List<EnvironmentDTO> list)
 	{
 		logger.info("Invoked onAdding() from "+this.getClass().getSimpleName());
 		
-		logger.info("Env name : "+envDto.getEnvValue());
-		logger.info("Url : "+envDto.getUrl());
-		envList.add(envDto);
-		envList.forEach(p->System.out.println(p));
+//		logger.info("Env name : "+envDto.getEnvValue());
+//		logger.info("Url : "+envDto.getUrl());
+//		envList.add(envDto);
+//		envList.forEach(p->System.out.println(p));
+		System.out.println("List is : "+list);
+		envList=list;
+		
 		return ResponseEntity.ok().body("Success");
+	}
+	
+	@RequestMapping("/bulksave")
+	public String saveBulkData(@RequestParam String fileName,Model model)
+	{
+		logger.info("Invoked saveBulkData() from "+this.getClass().getSimpleName());
+		loginService.validateAndSaveBulkData("vinayak");
+		model.addAttribute("status", "Success Insertion");
+		return "Login";
+		
+		
 	}
 
 }

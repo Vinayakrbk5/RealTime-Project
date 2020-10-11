@@ -22,9 +22,19 @@
 }
 
 #sel1 {
-	padding: 5%;
+	padding: 2%;
 	background: lightgreen;
 	margin-left: 20%;
+	margin-right: 20%;
+}
+
+#stat{
+margin-left: 20%;
+text-align:center;
+color:white;
+background:black;
+font-size:150%;
+margin-left: 20%;
 	margin-right: 20%;
 }
 
@@ -49,9 +59,10 @@
 			</li>
 		</ul>
 	</nav>
-	<h3>Welcome to The New World</h3>
-
+	<br>
+	
 	<div id="sel">
+	<span  id="stat"> <b>${status} </b></span>
 		<div id="sel1">
 		
 		<div>
@@ -64,18 +75,19 @@
 						<div class="modal-dialog modal-dialog-centered" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalCenterTitle">Modal
-										title</h5>
+									<h5 class="modal-title" id="exampleModalCenterTitle">Add Environment</h5>
 									<button type="button" class="close" data-dismiss="modal"
 										aria-label="Close">
 										<span aria-hidden="true">&times; AddEnv</span>
 									</button>
 								</div>
 								<div class="modal-body">
-<!-- 									<form action="addEnv" method="post"> -->
-
+								<b>
+								<div id="select"></div></b>
+								<br>
+										<form name="myForm" method="post">
 										<div class="form-group">
-											<label>Select Environment : </label> <select name="environment" id="environment"
+											<label>Select Environment : </label> <select name="envValue" id="environment"
 												class="form-control">
 												<option value="DEV">Develop</option>
 												<option value="SIT">SIT</option>
@@ -83,30 +95,28 @@
 												<option value="PROD">Production</option>
 											</select>
 										</div>
+										<!--   Name: <input type="text" name="lname"> -->
 										<div class="form-group">
 											<label>URL : </label> <input type="text" class="form-control" name="url" id="url"/>
 										</div>
-
 										<div>
-										<input type="button" class="btn btn-success" name="PostData" id="postData" value="Save" onclick="postDataFromAPI()"/>
-<!-- 											<button type="submit" class="btn btn-success">Submit</button> -->
-											<button type="reset" class="btn btn-danger">Cancel</button>
+  										<button type="button" class="btn btn-primary" onclick="validateForm()">Add</button>
+										
+											&nbsp;&nbsp;
+										<input type="button" class="btn btn-success" name="PostData" id="postData" value="Submit" onclick="postDataFromAPI()"/>
+<!-- 											<button type="reset" class="btn btn-danger">Cancel</button> -->
 										</div>
-
-
-<!-- 									</form> -->
+										</form>
+										</div>
+										
 								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary"
-										data-dismiss="modal">Close</button>
-<!-- 									<button type="submit" class="btn btn-primary">Save -->
-<!-- 										changes</button> -->
-								</div>
+<!-- 								<div class="modal-footer"> -->
+<!-- 									<button type="button" class="btn btn-secondary" -->
+<!-- 										data-dismiss="modal">Close</button> -->
+<!-- 								</div> -->
 							</div>
 						</div>
 					</div>
-				</div>
-		
 			<form action="login" method="post">
 				<div class="form-group">
 					<label>Project Name : </label> <input type="text" name="projectName"
@@ -120,7 +130,7 @@
 
 				<div class="form-group">
 					<label>Team Contact Email : </label> <input type="text"
-						name="lastName" class="form-control" id="in" name="email" required>
+						class="form-control" id="in" name="email" required>
 				</div>
 
 				<div class="form-group">
@@ -134,7 +144,7 @@
 				
 
 				<div class="form-group">
-					<label>Developed Date : </label> <input type="text" name="developedDate"
+					<label>Developed Date : </label> <input type="date" name="developedDate"
 						class="form-control" id="in">
 				</div>
 
@@ -149,7 +159,7 @@
 				</div>
 
 				<div class="form-group">
-					<label>Next Release : </label> <input type="text" name="nextRelease"
+					<label>Next Release : </label> <input type="date" name="nextRelease"
 						class="form-control" id="in">
 				</div>
 
@@ -164,19 +174,62 @@
 		</div>
 	</div>
 	
+	<div>
+	<form action="bulksave" method="post">
+	<div>
+	<input type="file" value="upload File" name="fileName">
+	</div>
+	<div>
+	<button type="submit" class="btn btn-success">SaveBulk</button>
+	</div>
+	</form>
+	</div>
+	
 	<script >
-	function postDataFromAPI(){
-		var modelObj={ envValue:$("#environment").val(),url:$("#url").val() };
-		console.log("Object is : "+modelObj);
+
+	var objArray=[];
+
+	function validateForm() {
+	var x = document.forms["myForm"]["envValue"].value;
+	 var y = document.forms["myForm"]["url"].value;
+// 	var formObj={envValue:x,url:y};
+	console.log("Environment is : "+x);
+	console.log("URL is : "+y);
+	if (x == "" || y=="") {
+	  alert("fields must be filled out");
+	  return false;
+	}
+	else
+	{
+	var formObj={envValue:x,url:y};
+// 	formObj.env=x;
+// 	formObj.url=y;
+	}
+	//console.log("FirstName is  : "+formObj.fname);
+	//console.log("LastName is  : "+formObj.lname);
+	objArray.push(formObj);
+	console.log("FirstName and last name is :")
+	for(let i of objArray)
+	{
+	console.log("Object is : "+i);
+	console.log(i.envValue +" "+i.url);
+	}
+	document.getElementById("select").innerHTML=x+" Environment is Added";
+	}
 		
-		$.ajax({
+	
+	function postDataFromAPI(){
+		//var modelObj={ envValue:$("#environment").val(),url:$("#url").val() };
+		console.log("Object is : "+objArray);
+		
+		$.ajax({ // type,url,data,headers
 			type:"POST",
 			url:"/addEnv",
 			headers:{
 				"Content-Type":"application/json",
 				"Accept":"application/json"
 			},
-			data:JSON.stringify(modelObj),
+			data:JSON.stringify(objArray),
 			success:function(data){
 				console.log("Data is : "+data);
 			},

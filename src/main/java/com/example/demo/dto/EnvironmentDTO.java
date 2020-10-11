@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class EnvironmentDTO {
 	
+	private Integer slNo;
 	private String envValue;
 	private String url;
 	
@@ -16,6 +17,13 @@ public class EnvironmentDTO {
 		log.info("Created "+this.getClass().getSimpleName());
 	}
 	
+	public Integer getSlNo() {
+		return slNo;
+	}
+	
+	public void setSlNo(Integer slNo) {
+		this.slNo = slNo;
+	}
 	
 	public String getEnvValue() {
 		return envValue;
@@ -36,10 +44,20 @@ public class EnvironmentDTO {
 		this.url = url;
 	}
 
-
 	@Override
 	public String toString() {
-		return "EnvironmentDTO [envValue=" + envValue + ", url=" + url + "]";
+		return "EnvironmentDTO [slNo=" + slNo + ", envValue=" + envValue + ", url=" + url + "]";
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return this.envValue.equals(((EnvironmentDTO)obj).envValue);
+	}
+	
+	@Override
+	public int hashCode() {
+		return 0;
+	}
+	
 	
 }

@@ -8,5 +8,7 @@ import com.example.demo.dto.LoginDTO;
 public interface LoginService {
 	
 	public String validateAndSave(LoginDTO dto,List<EnvironmentDTO> envList);
+	
+	public String validateAndSaveBulkData(String url);
 
 }

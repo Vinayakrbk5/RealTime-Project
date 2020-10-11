@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -45,8 +46,16 @@ public class LoginEntity implements Serializable{
 	private String lastRelease;
 	@Column(name="NEXT_RELEASE")
 	private String nextRelease;
+	@Column(name="CREATED_TIMESTAMP")
+	private String creationTime;
+	@Column(name="CREATED_BY")
+	private String createdBy;
+	@Column(name="UPDATE_TIME")
+	private String updateTime;
+	@Column(name="UPDATED_BY")
+	private String updatedBy;
 	
-	@OneToMany(mappedBy = "loginEntity")
+	@OneToMany(mappedBy = "loginEntity",cascade = CascadeType.ALL)
 	private List<EnvironmentEntity> entity;
 	
 	public LoginEntity() {
