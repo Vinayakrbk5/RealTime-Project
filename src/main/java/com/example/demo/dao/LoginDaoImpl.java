@@ -1,6 +1,5 @@
 package com.example.demo.dao;
 
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import org.hibernate.Session;
@@ -9,7 +8,6 @@ import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.entity.EnvironmentEntity;
 import com.example.demo.entity.LoginEntity;
 import com.example.demo.utility.SpringUtilClass;
 

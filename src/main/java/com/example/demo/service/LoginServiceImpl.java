@@ -21,111 +21,114 @@ import com.example.demo.entity.LoginEntity;
 import com.example.demo.excel_conversion.ExcelToDTOConverter;
 
 @Service
-public class LoginServiceImpl implements LoginService{
-	
+public class LoginServiceImpl implements LoginService {
+
 	@Autowired
 	LoginDAO loginDao;
-	
+
 	@Autowired
 	private ExcelToDTOConverter excelToDtoConverter;
-	
-	private static final Logger log=Logger.getLogger(LoginServiceImpl.class);
+
+	private static final Logger log = Logger.getLogger(LoginServiceImpl.class);
+
 	public LoginServiceImpl() {
-		log.info("Created "+this.getClass().getSimpleName());
+		log.info("Created " + this.getClass().getSimpleName());
 	}
-	
+
 	@Override
 	public String validateAndSave(LoginDTO dto, List<EnvironmentDTO> envList) {
 		log.info("Invoked validateAndSave() in LoginServiceImpl");
-		LoginEntity loginEntity=new LoginEntity();
-		List<EnvironmentEntity> envEntitySList=new ArrayList<>();
-		String name=null;
-		Date date=new Date();
+		LoginEntity loginEntity = new LoginEntity();
+		List<EnvironmentEntity> envEntitySList = new ArrayList<>();
+		String name = null;
+		Date date = new Date();
 		dto.setCreatedBy("vinayak");
 		dto.setCreationTime(date.toString());
 		dto.setUpdatedBy("Vinayak");
 		dto.setUpdateTime(date.toString());
 		try {
-			if(Objects.nonNull(dto))
-			{
+			if (Objects.nonNull(dto)) {
 				log.info("Dto is not null");
 				{
-					ModelMapper mapper=new ModelMapper();
+					ModelMapper mapper = new ModelMapper();
 					mapper.map(dto, loginEntity);
-					System.out.println("Dto is : "+dto);
-					System.out.println("Entity is : "+loginEntity);
-					for(EnvironmentDTO env:envList) {
-						
-						EnvironmentEntity envEntity=new EnvironmentEntity();
+					System.out.println("Dto is : " + dto);
+					System.out.println("Entity is : " + loginEntity);
+					for (EnvironmentDTO env : envList) {
+
+						EnvironmentEntity envEntity = new EnvironmentEntity();
 						mapper.map(env, envEntity);
 						envEntity.setLoginEntity(loginEntity);
 						envEntitySList.add(envEntity);
 					}
-					
+
 					loginEntity.setEntity(envEntitySList);
-					
+
 //					BeanUtils.copyProperties(dto, entity);
 //					log.info("FirstName and LastName are valid");
-					log.info("Entity is : "+loginEntity);
-					
-					name=loginDao.save(loginEntity);
+					log.info("Entity is : " + loginEntity);
+
+					name = loginDao.save(loginEntity);
 				}
 			}
-		}catch (Exception e) {
-			log.error("Error Occured in validateAndSave() in "+this.getClass().getSimpleName(),e);
+		} catch (Exception e) {
+			log.error("Error Occured in validateAndSave() in " + this.getClass().getSimpleName(), e);
 		}
 		return name;
-		
+
 	}
-	
+
 	@Override
 	public String validateAndSaveBulkData(String url) {
+		String status = null;
 		try {
-		log.info("Invoked validateAndSaveBulkData() from "+this.getClass().getSimpleName());
-		ModelMapper mapper=new ModelMapper();
-		Set<Set<EnvironmentDTO>> setOfSetData=new LinkedHashSet<Set<EnvironmentDTO>>();
-		Set<LoginDTO> setData=new LinkedHashSet<LoginDTO>();
-		setData=excelToDtoConverter.sendSet(url);
-		setOfSetData =excelToDtoConverter.sendSetOfSet(url);
-		
-		
-		LoginDTO loginDto=new LoginDTO();
-		List<EnvironmentDTO> envList=new ArrayList<>();
-		
-		List<LoginDTO> arrList=new ArrayList<LoginDTO>(setData);
-		List<List<EnvironmentDTO>> arrListOfList=new ArrayList<List<EnvironmentDTO>>();
-		for(Set<EnvironmentDTO> aList:setOfSetData)
-		{
-			List<EnvironmentDTO> list1=new ArrayList<EnvironmentDTO>(aList);
-			arrListOfList.add(list1);
+
+			if (Objects.nonNull(url)) {
+				log.info("Url is valid");
+				log.info("Invoked validateAndSaveBulkData() from " + this.getClass().getSimpleName());
+				ModelMapper mapper = new ModelMapper();
+				Set<Set<EnvironmentDTO>> setOfSetData = new LinkedHashSet<Set<EnvironmentDTO>>();
+				Set<LoginDTO> setData = new LinkedHashSet<LoginDTO>();
+				setData = excelToDtoConverter.sendSet(url);
+				setOfSetData = excelToDtoConverter.sendSetOfSet(url);
+
+				LoginDTO loginDto = new LoginDTO();
+				List<EnvironmentDTO> envList = new ArrayList<>();
+
+				List<LoginDTO> arrList = new ArrayList<LoginDTO>(setData);
+				List<List<EnvironmentDTO>> arrListOfList = new ArrayList<List<EnvironmentDTO>>();
+				for (Set<EnvironmentDTO> aList : setOfSetData) {
+					List<EnvironmentDTO> list1 = new ArrayList<EnvironmentDTO>(aList);
+					arrListOfList.add(list1);
+				}
+
+				for (int i = 0, j = 0; i < arrList.size() && j < arrListOfList.size(); i++, j++) {
+					log.info("List " + i + " is " + arrList.get(i));
+					log.info("List of List " + j + " is :" + arrListOfList.get(j));
+					loginDto = arrList.get(i);
+					envList = arrListOfList.get(j);
+					LoginEntity loginEntity = new LoginEntity();
+					List<EnvironmentEntity> entityList = new ArrayList<>();
+					mapper.map(loginDto, loginEntity);
+					for (EnvironmentDTO dto : envList) {
+						EnvironmentEntity envEntity = new EnvironmentEntity();
+						mapper.map(dto, envEntity);
+						envEntity.setLoginEntity(loginEntity);
+						entityList.add(envEntity);
+
+					}
+					loginEntity.setEntity(entityList);
+					status = loginDao.save(loginEntity);
+				}
+
+			} else {
+				log.info("Url is invalid");
+				status = "failed to save Data";
+			}
+		} catch (Exception e) {
+			log.info("Error in validateAndSaveBulkData() from " + this.getClass().getSimpleName(), e);
 		}
-		
-		for(int i=0, j=0;i<arrList.size() && j<arrListOfList.size();i++,j++)
-		{
-		System.out.println("List "+i+" is "+arrList.get(i));
-		System.out.println("List of List "+j+" is :"+arrListOfList.get(j));
-		loginDto=arrList.get(i);
-		envList=arrListOfList.get(j);
-		LoginEntity loginEntity=new LoginEntity();
-		List<EnvironmentEntity> entityList=new ArrayList<>();
-		mapper.map(loginDto, loginEntity);
-		for(EnvironmentDTO dto:envList)
-		{
-			EnvironmentEntity envEntity=new EnvironmentEntity();
-			mapper.map(dto, envEntity);
-			envEntity.setLoginEntity(loginEntity);
-			entityList.add(envEntity);
-			
-		}
-		loginEntity.setEntity(entityList);
-		loginDao.save(loginEntity);
-		}
-		
-		}
-		catch (Exception e) {
-			log.info("Error in validateAndSaveBulkData() from "+this.getClass().getSimpleName(),e);
-		}
-		return null;
+		return status;
 	}
 
 }
